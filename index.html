@@ -3,14 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podrži Partizan!</title>
+    <title>Podrži Partizan u Top 8!</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #000000;
             color: #ffffff;
-            margin: 50px;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Grb_Partizana.png/800px-Grb_Partizana.png');
+            background-size: cover;
+            background-position: center;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px #000000;
+        }
+        header h1 {
+            font-size: 3rem;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+        section {
+            padding: 20px;
         }
         button {
             padding: 15px 30px;
@@ -20,15 +41,11 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            margin: 20px 0;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #e6b800;
-        }
-        h1 {
-            color: #ffcc00;
-        }
-        p {
-            font-size: 16px;
         }
         .success {
             color: #00ff00;
@@ -40,14 +57,37 @@
             font-weight: bold;
             margin-top: 20px;
         }
+        footer {
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #333333;
+            color: #ffffff;
+            font-size: 14px;
+        }
+        footer a {
+            color: #ffcc00;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <h1>Podrži Partizan u Top 8!</h1>
-    <p>Glasaj i podrži naš tim! Morate omogućiti lokaciju da biste učestvovali.</p>
-    <button onclick="vote()">Glasaj</button>
-    <p id="message"></p>
-    <button onclick="downloadCSV()" style="margin-top: 20px;">Preuzmi sve lokacije</button>
+    <header>
+        <h1>Podrži Partizan u Top 8!</h1>
+    </header>
+
+    <section>
+        <p>Glasaj za naš tim i pomozi im da osvoje titulu! Klikni na dugme ispod i budi deo crno-bele priče.</p>
+        <button onclick="vote()">Glasaj</button>
+        <p id="message"></p>
+        <button onclick="downloadCSV()" style="margin-top: 20px;">Preuzmi sve lokacije</button>
+    </section>
+
+    <footer>
+        © 2025 Partizan Family - <a href="https://www.partizan.rs" target="_blank">Zvanična stranica</a>
+    </footer>
 
     <script>
         // Lista svih lokacija
