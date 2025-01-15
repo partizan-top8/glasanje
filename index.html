@@ -71,6 +71,26 @@
         footer a:hover {
             text-decoration: underline;
         }
+        table {
+            margin-top: 30px;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #fff;
+        }
+        table th {
+            background-color: #333;
+        }
+        table td {
+            background-color: #444;
+        }
+        table a {
+            color: #ffcc00;
+        }
     </style>
 </head>
 <body>
@@ -79,10 +99,24 @@
     </header>
 
     <section>
-        <p>Glasaj za naš tim i pomozi im da osvoje titulu! Klikni na dugme ispod i budi deo crno-bele priče.</p>
+        <p>Glasaj za naš tim i pomozi im da osvoje titulu! Klikni na dugme ispod da bi učestvovao u glasanju.</p>
         <button onclick="vote()">Glasaj</button>
         <p id="message"></p>
-        <button onclick="downloadCSV()" style="margin-top: 20px;">Preuzmi sve lokacije</button>
+    </section>
+
+    <section>
+        <h2>Lista Lokacija</h2>
+        <table id="locationTable">
+            <thead>
+                <tr>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Vreme</th>
+                    <th>Google Maps</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </section>
 
     <footer>
@@ -108,6 +142,9 @@
                         const timestamp = new Date().toLocaleString();
                         locations.push({ latitude, longitude, timestamp });
 
+                        // Dodavanje nove lokacije u tabelu
+                        updateLocationTable();
+
                         // Poruka o uspešnom glasanju
                         messageElement.innerHTML = 
                             `<span class="success">Hvala što si glasao! Tvoj glas je zabeležen.</span>`;
@@ -130,27 +167,19 @@
             }
         }
 
-        // Funkcija za preuzimanje CSV fajla
-        function downloadCSV() {
-            if (locations.length === 0) {
-                alert("Još uvek nema glasova!");
-                return;
-            }
-
-            // Generisanje CSV sadržaja
-            let csvContent = "data:text/csv;charset=utf-8,Latitude,Longitude,Timestamp\n";
+        // Funkcija za ažuriranje tabele sa lokacijama
+        function updateLocationTable() {
+            const tableBody = document.getElementById("locationTable").getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // Očisti postojeće redove
             locations.forEach(location => {
-                csvContent += `${location.latitude},${location.longitude},${location.timestamp}\n`;
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${location.latitude}</td>
+                    <td>${location.longitude}</td>
+                    <td>${location.timestamp}</td>
+                    <td><a href="https://www.google.com/maps?q=${location.latitude},${location.longitude}" target="_blank">Pogledaj na Google Maps</a></td>
+                `;
             });
-
-            // Kreiranje i preuzimanje fajla
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "lokacije.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
     </script>
 </body>
