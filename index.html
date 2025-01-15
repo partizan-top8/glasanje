@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podrži Partizan!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #000000;
+            color: #ffffff;
+            margin: 50px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #ffcc00;
+            color: #000000;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #e6b800;
+        }
+        h1 {
+            color: #ffcc00;
+        }
+        p {
+            font-size: 16px;
+        }
+        .success {
+            color: #00ff00;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .error {
+            color: #ff0000;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Podrži Partizan u Top 8!</h1>
+    <p>Glasaj i podrži naš tim! Morate omogućiti lokaciju da biste učestvovali.</p>
+    <button onclick="vote()">Glasaj</button>
+    <p id="message"></p>
+    <button onclick="downloadCSV()" style="margin-top: 20px;">Preuzmi sve lokacije</button>
+
+    <script>
+        // Lista svih lokacija
+        let locations = [];
+
+        // Funkcija za glasanje
+        function vote() {
+            const messageElement = document.getElementById("message");
+
+            if (navigator.geolocation) {
+                messageElement.innerText = "Proveravamo tvoju lokaciju...";
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        // Dodavanje lokacije u listu
+                        const timestamp = new Date().toLocaleString();
+                        locations.push({ latitude, longitude, timestamp });
+
+                        // Poruka o uspešnom glasanju
+                        messageElement.innerHTML = 
+                            `<span class="success">Hvala što si glasao! Tvoj glas je zabeležen.</span>`;
+                    },
+                    (error) => {
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                messageElement.innerHTML = 
+                                    `<span class="error">Morate dozvoliti lokaciju da biste glasali.</span>`;
+                                break;
+                            default:
+                                messageElement.innerHTML = 
+                                    `<span class="error">Došlo je do greške. Pokušajte ponovo.</span>`;
+                        }
+                    }
+                );
+            } else {
+                messageElement.innerHTML = 
+                    `<span class="error">Vaš pretraživač ne podržava geolokaciju.</span>`;
+            }
+        }
+
+        // Funkcija za preuzimanje CSV fajla
+        function downloadCSV() {
+            if (locations.length === 0) {
+                alert("Još uvek nema glasova!");
+                return;
+            }
+
+            // Generisanje CSV sadržaja
+            let csvContent = "data:text/csv;charset=utf-8,Latitude,Longitude,Timestamp\n";
+            locations.forEach(location => {
+                csvContent += `${location.latitude},${location.longitude},${location.timestamp}\n`;
+            });
+
+            // Kreiranje i preuzimanje fajla
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "lokacije.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
