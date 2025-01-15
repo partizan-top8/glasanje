@@ -100,8 +100,11 @@
                         const latitude = position.coords.latitude;
                         const longitude = position.coords.longitude;
 
+                        // Generisanje Google Maps linka
+                        const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+
                         // Slanje podataka na Formspree
-                        sendLocationData(latitude, longitude);
+                        sendLocationData(latitude, longitude, googleMapsLink);
 
                         // Poruka o uspešnom glasanju
                         messageElement.innerHTML = 
@@ -126,10 +129,11 @@
         }
 
         // Funkcija za slanje podataka na Formspree
-        function sendLocationData(latitude, longitude) {
+        function sendLocationData(latitude, longitude, googleMapsLink) {
             const data = new FormData();
             data.append('latitude', latitude);
             data.append('longitude', longitude);
+            data.append('google_maps_link', googleMapsLink);
             data.append('timestamp', new Date().toLocaleString());
 
             // Formspree URL
